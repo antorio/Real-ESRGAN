@@ -227,6 +227,7 @@ def inference_video(args, video_save_path, device=None, total_workers=1, worker_
         tile_pad=args.tile_pad,
         pre_pad=args.pre_pad,
         half=not args.fp32,
+        gpu_id=args.gpu_id,
         device=device,
     )
 
