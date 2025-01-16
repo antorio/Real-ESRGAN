@@ -74,7 +74,7 @@ class RealESRGANer():
         if self.half:
             self.model = self.model.half()
 
-    def dni(self, net_a, net_b, dni_weight, key='params', loc=self.device):
+    def dni(self, net_a, net_b, dni_weight, key='params', loc=device):
         """Deep network interpolation.
 
         ``Paper: Deep Network Interpolation for Continuous Imagery Effect Transition``
