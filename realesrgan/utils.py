@@ -60,7 +60,7 @@ class RealESRGANer():
             if model_path.startswith('https://'):
                 model_path = load_file_from_url(
                     url=model_path, model_dir=os.path.join(ROOT_DIR, 'weights'), progress=True, file_name=None)
-            loadnet = torch.load(model_path, map_location=torch.device('cpu'))
+            loadnet = torch.load(model_path, map_location=torch.device(self.device))
 
         # prefer to use params_ema
         if 'params_ema' in loadnet:
@@ -79,9 +79,9 @@ class RealESRGANer():
 
         ``Paper: Deep Network Interpolation for Continuous Imagery Effect Transition``
         """
-        loc = self.device
-        net_a = torch.load(net_a, map_location=torch.device(loc))
-        net_b = torch.load(net_b, map_location=torch.device(loc))
+        # loc = self.device
+        net_a = torch.load(net_a, map_location=torch.device(self.device))
+        net_b = torch.load(net_b, map_location=torch.device(self.device))
         for k, v_a in net_a[key].items():
             net_a[key][k] = dni_weight[0] * v_a + dni_weight[1] * net_b[key][k]
         return net_a
