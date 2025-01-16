@@ -74,11 +74,12 @@ class RealESRGANer():
         if self.half:
             self.model = self.model.half()
 
-    def dni(self, net_a, net_b, dni_weight, key='params', loc=device):
+    def dni(self, net_a, net_b, dni_weight, key='params', loc='cpu'):
         """Deep network interpolation.
 
         ``Paper: Deep Network Interpolation for Continuous Imagery Effect Transition``
         """
+        loc = self.device
         net_a = torch.load(net_a, map_location=torch.device(loc))
         net_b = torch.load(net_b, map_location=torch.device(loc))
         for k, v_a in net_a[key].items():
