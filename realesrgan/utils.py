@@ -60,7 +60,7 @@ class RealESRGANer():
             if model_path.startswith('https://'):
                 model_path = load_file_from_url(
                     url=model_path, model_dir=os.path.join(ROOT_DIR, 'weights'), progress=True, file_name=None)
-            loadnet = torch.load(model_path, map_location=torch.device(self.device))
+            loadnet = torch.load(model_path, map_location=torch.device(self.device), weights_only=True)
 
         # prefer to use params_ema
         if 'params_ema' in loadnet:
@@ -76,7 +76,7 @@ class RealESRGANer():
 
         if torch.__version__[0] >= '2':
             self.model = self.model.to(memory_format=torch.channels_last)
-            print('torch ver 2')
+            print('torch ver>=2')
             self.model = torch.compile(self.model)
 
     def dni(self, net_a, net_b, dni_weight, key='params', loc='cpu'):
