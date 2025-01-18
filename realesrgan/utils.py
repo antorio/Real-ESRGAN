@@ -67,8 +67,8 @@ class RealESRGANer():
             keyname = 'params_ema'
         else:
             keyname = 'params'
-        model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
-        # model.load_state_dict(loadnet[keyname], strict=True)
+        # model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
+        model.load_state_dict(loadnet[keyname], strict=True)
 
         model.eval()
         self.model = model.to(self.device)
@@ -86,8 +86,8 @@ class RealESRGANer():
         ``Paper: Deep Network Interpolation for Continuous Imagery Effect Transition``
         """
         # loc = self.device
-        net_a = torch.load(net_a, map_location=torch.device(self.device), weights_only=True)
-        net_b = torch.load(net_b, map_location=torch.device(self.device), weights_only=True)
+        net_a = torch.load(net_a, map_location=torch.device(loc), weights_only=True)
+        net_b = torch.load(net_b, map_location=torch.device(loc), weights_only=True)
         for k, v_a in net_a[key].items():
             net_a[key][k] = dni_weight[0] * v_a + dni_weight[1] * net_b[key][k]
         return net_a
