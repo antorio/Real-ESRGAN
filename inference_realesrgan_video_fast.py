@@ -47,6 +47,7 @@ except ImportError:
     pip.main(['install', '--user', 'ffmpeg-python'])
     import ffmpeg
 
+print('fast inference')
 
 def get_video_meta_info(video_path):
     ret = {}
