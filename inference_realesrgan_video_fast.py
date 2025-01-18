@@ -7,24 +7,6 @@ import os
 import shutil
 import subprocess
 import torch
-
-import sys
-import types
-
-try:
-    # Check if `torchvision.transforms.functional_tensor` and `rgb_to_grayscale` are missing
-    from torchvision.transforms.functional_tensor import rgb_to_grayscale
-except ImportError:
-    # Import `rgb_to_grayscale` from `functional` if it’s missing in `functional_tensor`
-    from torchvision.transforms.functional import rgb_to_grayscale
-
-    # Create a module for `torchvision.transforms.functional_tensor`
-    functional_tensor = types.ModuleType("torchvision.transforms.functional_tensor")
-    functional_tensor.rgb_to_grayscale = rgb_to_grayscale
-
-    # Add this module to `sys.modules` so other imports can access it
-    sys.modules["torchvision.transforms.functional_tensor"] = functional_tensor
-    
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
 from os import path as osp
@@ -180,7 +162,6 @@ class Writer:
                                  loglevel='error').overwrite_output().run_async(
                                      pipe_stdin=True, pipe_stdout=True, cmd=args.ffmpeg_bin))
 
-    
     def write_frame(self, frame: np.ndarray):
         assert frame.dtype == np.uint8
         frame = frame.data
@@ -221,7 +202,6 @@ def pre_process_batched(self: RealESRGANer):
 
 
 @torch.no_grad()
-
 def batch_enhance_rgb(self: RealESRGANer, imgs, outscale=None, alpha_upsampler='realesrgan'):
     tensors = []
     for img in imgs:
@@ -249,7 +229,6 @@ def batch_enhance_rgb(self: RealESRGANer, imgs, outscale=None, alpha_upsampler='
         yield output
 
 
-
 def inference_video(args, video_save_path, device=None, total_workers=1, worker_idx=0):
     # ---------------------- determine models according to model names ---------------------- #
     args.model_name = args.model_name.split('.pth')[0]
@@ -257,14 +236,6 @@ def inference_video(args, video_save_path, device=None, total_workers=1, worker_
         model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
         netscale = 4
         file_url = ['https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth']
-    elif args.model_name == '4x_NMKD-Superscale-SP_178000_G': 
-        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
-        netscale = 4
-        file_url = ['https://huggingface.co/SDExplains/Upscaler/resolve/3b6ebcf0b52425d2e36be6a6d8ccda44d47bb0e7/4x_NMKD-Superscale-SP_178000_G.pth']
-    elif args.model_name == '4x-UltraSharp': 
-        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
-        netscale = 4
-        file_url = ['https://huggingface.co/lokCX/4x-Ultrasharp/resolve/main/4x-UltraSharp.pth']
     elif args.model_name == 'RealESRNet_x4plus':  # x4 RRDBNet model
         model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
         netscale = 4
@@ -445,26 +416,29 @@ def main():
     parser.add_argument('-t', '--tile', type=int, default=0, help='Tile size, 0 for no tile during testing')
     parser.add_argument('--tile_pad', type=int, default=10, help='Tile padding')
     parser.add_argument('--pre_pad', type=int, default=0, help='Pre padding size at each border')
-    parser.add_argument('--face_enhance', action='store_true', help='Use GFPGAN to enhance face')
+    # parser.add_argument('--face_enhance', action='store_true', help='Use GFPGAN to enhance face')
     parser.add_argument(
         '--fp32', action='store_true', help='Use fp32 precision during inference. Default: fp16 (half precision).')
     parser.add_argument('--fps', type=float, default=None, help='FPS of the output video')
     parser.add_argument('--ffmpeg_bin', type=str, default='ffmpeg', help='The path to ffmpeg')
-    parser.add_argument('--extract_frame_first', action='store_true')
+    # parser.add_argument('--extract_frame_first', action='store_true')
     parser.add_argument('--num_process_per_gpu', type=int, default=1)
     parser.add_argument('--batch', type=int, default=4)
 
-    parser.add_argument(
-        '--alpha_upsampler',
-        type=str,
-        default='realesrgan',
-        help='The upsampler for the alpha channels. Options: realesrgan | bicubic')
-    parser.add_argument(
-        '--ext',
-        type=str,
-        default='auto',
-        help='Image extension. Options: auto | jpg | png, auto means using the same extension as inputs')
+    # parser.add_argument(
+    #     '--alpha_upsampler',
+    #     type=str,
+    #     default='realesrgan',
+    #     help='The upsampler for the alpha channels. Options: realesrgan | bicubic')
+    # parser.add_argument(
+    #     '--ext',
+    #     type=str,
+    #     default='auto',
+    #     help='Image extension. Options: auto | jpg | png, auto means using the same extension as inputs')
     args = parser.parse_args()
+    args.extract_frame_first = False
+    args.face_enhance = False
+    # args.alpha_upsampler = 'bicubic'
 
     args.input = args.input.rstrip('/').rstrip('\\')
     os.makedirs(args.output, exist_ok=True)
