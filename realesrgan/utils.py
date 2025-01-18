@@ -62,7 +62,7 @@ class RealESRGANer():
                     url=model_path, model_dir=os.path.join(ROOT_DIR, 'weights'), progress=True, file_name=None)
             loadnet = torch.load(model_path, map_location=torch.device('cpu'))
 
-        prefer to use params_ema
+        # prefer to use params_ema
         if 'params_ema' in loadnet:
             keyname = 'params_ema'
         else:
