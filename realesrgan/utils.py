@@ -70,7 +70,7 @@ class RealESRGANer():
         # model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
         # model.load_state_dict(loadnet[keyname], strict=False)
         print(loadnet.keys())
-        model.load_state_dict(loadnet, strict=False)
+        model.load_state_dict(loadnet, strict=True)
 
         model.eval()
         self.model = model.to(self.device)
