@@ -457,6 +457,8 @@ def main():
     # parser.add_argument('--extract_frame_first', action='store_true')
     parser.add_argument('--num_process_per_gpu', type=int, default=1)
     parser.add_argument('--batch', type=int, default=4)
+    parser.add_argument(
+        '-g', '--gpu-id', type=int, default=0, help='gpu device to use (default=None) can be 0,1,2 for multi-gpu')
 
     # parser.add_argument(
     #     '--alpha_upsampler',
