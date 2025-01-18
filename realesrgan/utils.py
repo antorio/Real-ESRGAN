@@ -60,17 +60,15 @@ class RealESRGANer():
             if model_path.startswith('https://'):
                 model_path = load_file_from_url(
                     url=model_path, model_dir=os.path.join(ROOT_DIR, 'weights'), progress=True, file_name=None)
-            loadnet = torch.load(model_path, map_location=torch.device('cpu'))
+            loadnet = torch.load(model_path, map_location=torch.device(self.device))
 
         # prefer to use params_ema
         if 'params_ema' in loadnet:
             keyname = 'params_ema'
         else:
             keyname = 'params'
-        model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
-                     
-        # model.load_state_dict(loadnet[keyname], strict=True)
-                     
+        model.load_state_dict(loadnet[keyname], strict=True)
+        # model.load_state_dict(loadnet.get(keyname, loadnet), strict=True)
         # print(loadnet.keys())
         # model.load_state_dict(loadnet, strict=False)
 
