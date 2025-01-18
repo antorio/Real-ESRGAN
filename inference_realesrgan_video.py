@@ -198,7 +198,7 @@ def inference_video(args, video_save_path, device=None, total_workers=1, worker_
     elif args.model_name == '4x_NMKD-Superscale-SP_178000_G': 
         # model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
         netscale = 4
-        # file_url = ['https://nmkd.de/shared/ESRGAN/Models/Realistic%2C%20Multipurpose/4x_NMKD-Superscale-SP_178000_G.pth']
+        file_url = ['https://huggingface.co/SDExplains/Upscaler/resolve/3b6ebcf0b52425d2e36be6a6d8ccda44d47bb0e7/4x_NMKD-Superscale-SP_178000_G.pth']
     elif args.model_name == 'RealESRNet_x4plus':  # x4 RRDBNet model
         model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
         netscale = 4
