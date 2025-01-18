@@ -63,12 +63,14 @@ class RealESRGANer():
             loadnet = torch.load(model_path, map_location=torch.device('cpu'))
 
         # prefer to use params_ema
-        if 'params_ema' in loadnet:
-            keyname = 'params_ema'
-        else:
-            keyname = 'params'
-        model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
+        # if 'params_ema' in loadnet:
+        #     keyname = 'params_ema'
+        # else:
+        #     keyname = 'params'
+        # model.load_state_dict(loadnet.get(keyname, loadnet), strict=False)
         # model.load_state_dict(loadnet[keyname], strict=False)
+        print(loadnet.keys())
+        model.load_state_dict(loadnet, strict=False)
 
         model.eval()
         self.model = model.to(self.device)
